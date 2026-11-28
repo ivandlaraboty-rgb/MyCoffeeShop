@@ -851,6 +851,46 @@ html.mo-rm *,html.mo-rm *::before,html.mo-rm *::after{transition-property:opacit
   html:not(.mo-off) *,html:not(.mo-off) *::before,html:not(.mo-off) *::after{animation:none!important;transition-property:opacity,background-color,color,border-color!important;transition-duration:var(--d-fast)!important}
 }
 </style>
+<style id="gd-css">
+.gd-dots{display:flex;gap:6px;justify-content:center;margin:2px 0 12px}
+.gd-dots button{all:unset;width:8px;height:8px;border-radius:99px;background:var(--line);cursor:pointer;transition:width .25s,background .25s}
+.gd-dots button.was{background:var(--accent);opacity:.45}
+.gd-dots button.on{width:22px;background:var(--accent)}
+.gd-card{background:var(--panel2);border-radius:var(--r-lg,20px);padding:16px 16px 14px}
+.gd-card h2{font-size:21px;line-height:1.2;margin:10px 0 8px}
+.gd-card p{margin:0 0 10px;line-height:1.45}
+.gd-card p:last-child{margin-bottom:0}
+.gd-ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--accent);color:var(--on-accent,#fff)}
+.gd-ico svg{width:26px;height:26px}
+.gd-ul,.gd-ol{margin:0 0 6px;padding-left:20px;line-height:1.45}
+.gd-ul li,.gd-ol li{margin:0 0 7px}
+.gd-show{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.gd-price{margin-top:12px;padding:12px;border-radius:var(--r-md,14px);background:var(--panel);border:var(--bw,2px) solid var(--line)}
+.gd-price>b{display:block;margin-bottom:4px}
+.gd-price p{margin:0 0 6px;font-size:14px;color:var(--muted)}
+.gd-pk{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line)}
+.gd-pk i{flex:none;width:24px;height:24px;border-radius:99px;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:13px;background:var(--accent);color:var(--on-accent,#fff)}
+.gd-pk b{display:block}
+.gd-pk small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+a.btn{text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box}
+.gd-banner{position:relative;margin:0 0 14px;padding:14px 40px 14px 14px;border-radius:var(--r-lg,20px);background:var(--panel2);border:var(--bw,2px) solid var(--accent)}
+.gd-banner>b{display:block;font-size:16px}
+.gd-banner>small{display:block;color:var(--muted);margin-top:2px}
+.gd-banner .x{position:absolute;top:8px;right:8px}
+.gd-q{font-weight:900;font-size:17px}
+#gd-tip{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);width:min(92vw,460px);z-index:70;background:var(--panel);color:var(--text);border:var(--bw,2px) solid var(--accent);border-radius:var(--r-lg,20px);padding:12px 14px;box-shadow:0 12px 36px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+#gd-tip.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#gd-tip p{margin:0 0 10px;line-height:1.4;font-size:14px}
+@keyframes gdSpot{0%{box-shadow:0 0 0 0 var(--accent)}40%{box-shadow:0 0 0 6px var(--accent)}100%{box-shadow:0 0 0 3px transparent}}
+.gd-spot{animation:gdSpot 1.2s ease-out 3;border-radius:var(--r-md,14px)}
+@media (prefers-reduced-motion:reduce){.gd-spot{animation:none;box-shadow:0 0 0 3px var(--accent)}}
+.gd-card .btn,.gd-show .btn,.gd-banner .btn,#gd-tip .btn,.gd-nav .btn{white-space:normal;text-align:center;line-height:1.2}
+.top .gear-btn.gd-q{width:38px;height:38px;font-size:19px;font-weight:900;color:var(--accent)}
+.gd-logo{position:relative;flex:none;display:block;line-height:0}
+.gd-logo .demo-tag{position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);margin:0;font-size:9px;line-height:13px;letter-spacing:.06em;padding:0 4px;box-shadow:0 0 0 2px var(--bg)}
+.gd-banner .row{margin-right:-26px}
+.gd-req textarea{width:100%;box-sizing:border-box;resize:none;font-size:15px;line-height:1.4}
+</style>
 </head>
 <body>
 <div id="app"><div id="scroll"><div class="wrap" id="main"></div></div><nav id="tabs"></nav></div>
@@ -3330,7 +3370,7 @@ var MAX_BOT = '';
 var WEB_URL = '';
 var YA_CLIENT_ID = '';   // ClientID приложения на oauth.yandex.ru для датчиков ХАССП (необязательно — можно вписать в приложении)
 // Когда собран этот файл — видно внизу профиля. Помогает понять, открылась ли новая версия.
-var BUILD = '25.11.2026 13:30';
+var BUILD = '28.11.2026 15:00';
 // ===============================================
 
 var C = PICH_CORE;
@@ -4038,9 +4078,10 @@ function renderAll() { renderMain(); renderTabs(); if (S.sheet && S.sheet.live) 
 
 function renderTop() {
   var me = S.me, cm = curMonth(), today = todayISO();
-  var chip = '<button class="me-chip" data-a="profile" aria-label="Профиль и тема">' + ava(me, 'sm') + '<span class="n">' + esc(me.name) + '</span>' + (MODE === 'demo' ? '<span class="demo-tag">демо</span>' : '') + '</button>';
+  var chip = '<button class="me-chip" data-a="profile" aria-label="Профиль и тема">' + ava(me, 'sm') + '<span class="n">' + esc(me.name) + '</span>' + '</button>';
+  var gq = MODE === 'demo' ? '<button class="gear-btn gd-q" data-a="guideOpen" data-v="0" aria-label="Как пользоваться">?</button>' : '';
   var gear = isAdmin() ? '<button class="gear-btn' + (S.tab === 'settings' ? ' on' : '') + '" data-a="settings" aria-label="Настройки">' + I('gear') + '</button>' : '';
-  return '<div class="top">' + logo() + '<div class="ttl"><b>' + esc(S.db.settings.cafeName || 'Моя кофейня') + '</b><small>' + (isAdmin() ? 'админ' : 'бариста') + '</small></div>' + gear + chip + '</div>';
+  return '<div class="top">' + (MODE === 'demo' ? '<span class="gd-logo">' + logo() + '<span class="demo-tag">демо</span></span>' : logo()) + '<div class="ttl"><b>' + esc(S.db.settings.cafeName || 'Моя кофейня') + '</b><small>' + (isAdmin() ? 'админ' : 'бариста') + '</small></div>' + gq + gear + chip + '</div>';
 }
 function statCells() {
   var me = S.me, cm = curMonth(), today = todayISO(), cells;
@@ -4363,7 +4404,7 @@ function navFor(tab) {
   return n;
 }
 function vToday() {
-  var me = S.me, today = todayISO(), hm = hmNow(), h = '', inSched = me.inSchedule !== false;
+  var me = S.me, today = todayISO(), hm = hmNow(), h = MODE === 'demo' ? guideBanner() : '', inSched = me.inSchedule !== false;
   var mine = S.db.shifts.filter(function (s) { return s.staffId === me.id && s.date === today; });
   if (isAdmin()) h += todayAttention(today);
   if (inSched) h += sec('t-shift', I('cup'), 'Моя смена', myShiftBody(today, mine), dayShort(today));
@@ -5393,6 +5434,7 @@ SHEETS.profile = function () {
   h += '<h3>Тема оформления</h3><div class="themes">' + THEMES.filter(function (t) { return !t.group; }).map(themeBtn).join('') + '</div>';
   h += '<h3>Темы со своим характером</h3><div class="themes">' + THEMES.filter(function (t) { return t.group === 'brand'; }).map(themeBtn).join('') + '</div><div class="hint mt">Тема сохраняется на этом телефоне и не меняется у остальных.</div>';
   if (MODE === 'demo') {
+    h += '<h3>Гайд и подключение</h3><button class="btn main wide" data-a="guideOpen" data-v="1">Как пользоваться приложением</button><button class="btn wide mt" data-a="guideApplyOpen">Как подключить свою кофейню</button>';
     h += '<h3>Демо: смотреть как</h3><div class="box"><div class="list">' + Demo.db.staff.filter(function (x) { return x.active !== false; }).map(function (x) {
       return '<button class="li" data-a="demoSet" data-id="' + x.id + '">' + ava(x, 'lg') + '<div class="main-t"><b>' + esc(x.name) + '</b><small>' + (x.role === 'admin' ? 'админ' : 'бариста') + '</small></div>' + (x.id === S.me.id ? '<span class="badge green">сейчас</span>' : '') + '</button>';
     }).join('') + '</div></div>';
@@ -6784,6 +6826,160 @@ function setupTelegram() {
   try { TGW.BackButton.onClick(function () { if (S.sheet && S.sheet.args && S.sheet.args.back) back(); else if (S.sheet) closeSheet(); else H.pageBack(); }); } catch (e) {}
 }
 
+// ===== Гайд по демо: зачем приложение, как пользоваться, как подключить (только в демо) =====
+var GUIDE_TG = 'pichsvyaz';
+var GUIDE_URL = 'https://t.me/' + GUIDE_TG;
+var GUIDE_STEPS = [
+  { em: 'cup', t: 'Это «Моя кофейня»', body:
+    '<p>Приложение для команды кофейни прямо в Telegram: <b>график, зарплата, выручка, журналы ХАССП и абонементы</b> — в одном месте вместо таблиц, калькулятора и бумажных журналов.</p>' +
+    '<p>Это демо. Данные выдуманные, нажимать можно всё — ничего не сломается, а изменения видите только вы.</p>' },
+  { em: 'shop', t: 'Кому и зачем', body:
+    '<p>Для владельца небольшой кофейни — <b>1–3 точки, 2–15 бариста</b> — который сам ведёт график, считает зарплату и отвечает перед проверками.</p>' +
+    '<ul class="gd-ul"><li><b>Ничего не нужно устанавливать</b> — приложение открывается кнопкой в Telegram, на компьютере — в браузере.</li>' +
+    '<li><b>Данные остаются у вас</b> — всё хранится в вашей Google-таблице.</li>' +
+    '<li><b>Сделано в живой кофейне</b> — приложение работает в кофейне ПИЧ и выросло из её задач.</li></ul>' },
+  { em: 'coin', t: 'Зарплата и часы считаются сами', body:
+    '<p>Вы ставите смены в графике, бариста после смены вписывает часы — и приложение само считает зарплату: <b>часы × ставка + процент с выручки + премии − вычеты</b>.</p>' +
+    '<p>У каждого видно, сколько начислено, выплачено и <b>сколько осталось получить</b>, и прогноз на конец месяца. Не вписанные часы не попадут в зарплату — приложение напомнит.</p>',
+    show: [['график смен', 'sched'], ['где вписать часы', 'hours'], ['зарплату команды', 'pay']] },
+  { em: 'thermo', t: 'ХАССП без бумаги', body:
+    '<p>Проверки холодильников и витрин по времени и норме: если замер вне нормы, бариста записывает, что сделал. <b>Допуск к смене, сроки медкнижек, уроки и тест по санминимуму</b> — тоже здесь.</p>' +
+    '<p>Пропущенная проверка или истекающая медкнижка — сообщение в Telegram. Датчики Яндекс Умного дома записывают температуру сами. Ненужные требования выключаются.</p>',
+    show: [['проверки сегодня', 'haccp']] },
+  { em: 'chart', t: 'Деньги и отчёты', body:
+    '<p>С кассой aQsi <b>выручка и продажи приходят сами</b>; без кассы выручку вносит бариста на смене. Расходы — с фото чека.</p>' +
+    '<ul class="gd-ul"><li><b>Итоги месяца</b> с планом и прогнозом и <b>итоги дня</b> вечером в Telegram.</li>' +
+    '<li><b>Себестоимость</b> каждого напитка: состав, закупочные цены, стаканы и крышки, фудкост.</li>' +
+    '<li><b>ABC-анализ меню</b>, <b>загрузка по часам</b> против графика, продажи по бариста.</li></ul>',
+    show: [['отчёты', 'reports'], ['конструктор себестоимости', 'cost']] },
+  { em: 'ticket', t: 'Абонементы и меню', body:
+    '<p>Абонемент на любое число напитков или карта «каждый N-й в подарок»: бариста находит гостя по имени или телефону и <b>отмечает напиток в одно нажатие</b>. Видно, кто давно не заходил и что скоро сгорит.</p>' +
+    '<p>ТТК с объёмами 250/350/450 и фото-эталоном, <b>тест по меню</b> для новичков.</p>',
+    show: [['абонементы', 'cards'], ['ТТК и обучение', 'menu']] },
+  { em: 'team', t: 'Каждый видит своё', body:
+    '<p>Вы — админ: видите всё и решаете, что можно команде. Бариста видит <b>свои смены, свою зарплату и ТТК</b>.</p>' +
+    '<p>Вход по коду-приглашению, уволенный сотрудник теряет доступ одной кнопкой.</p>',
+    show: [['приложение глазами бариста', 'barista']] },
+  { em: 'spark', t: 'Как начать', apply: true }
+];
+var GUIDE_SHOW = {
+  sched: { tab: 'schedule', sel: '[data-sec="cal"], .cal, .tbl-wrap', tip: 'График смен: утро, вечер, фулл или своё время. Нажмите на день, чтобы поставить смену.' },
+  hours: { tab: 'today', sel: '[data-sec="t-shift"]', tip: 'Здесь бариста видит свою смену. После неё появляется «Вписать часы» — и смена попадает в зарплату.' },
+  pay: { tab: 'money', sel: '[data-sec="payteam"], .nav-row[data-v="payteam"]', tip: 'Зарплата команды: у каждого начислено, выплачено и сколько осталось получить.' },
+  haccp: { tab: 'today', sel: '[data-sec="hc-checks"], .nav-row[data-v="hc-checks"]', tip: 'Проверки ХАССП на сегодня. Ниже — журналы проверок и допуска, медкнижки команды.' },
+  reports: { tab: 'money', sel: '.rep-h', tip: 'Отчёты владельца: итоги месяца и дня, себестоимость, загрузка по часам, ABC-анализ, бариста, абонементы.' },
+  cost: { run: function () { H.tab({ v: 'money' }); setTimeout(function () { H.costMenuOpen(); }, 380); }, tip: 'Конструктор себестоимости: найдите напиток, поменяйте количество в составе — себестоимость пересчитается сразу.' },
+  cards: { tab: 'cards', sel: '[data-a="cardNew"]', tip: 'Здесь оформляют абонемент, а ниже — все гости: найти по имени или телефону и отметить напиток.' },
+  menu: { tab: 'menu', sel: '#main .seg, #main .search', tip: 'ТТК с поиском и объёмами. Рядом — обучение и тест по меню для команды.' },
+  barista: { run: function () { H.demoWho(); }, tip: 'Выберите бариста — и увидите приложение его глазами. Вернуться к админу можно здесь же.' }
+};
+var GUIDE = { last: 0 };
+function guideApplyHtml() {
+  return '<p>Подключение — <b>за один день</b>. Поддержка — <b>каждый день с 8:00 до 20:00</b> в Telegram.</p>' +
+    '<ol class="gd-ol"><li><b>Оставьте заявку</b> в Telegram — @' + GUIDE_TG + '. Напишите название кофейни, сколько точек и бариста и какая у вас касса.</li>' +
+    '<li><b>Подключение</b>: приложение заработает в вашем Telegram и вашей Google-таблице, команда получит приглашения, поможем подключить кассу aQsi.</li>' +
+    '<li><b>Первая смена в приложении</b> — уже на следующий день.</li></ol>' +
+    '<div class="gd-price"><b>Стоимость</b><p>Подписка, подключение входит в неё. Сумму назовём в ответ на заявку.</p></div>' +
+    '<div class="gd-price"><b>Настройка под ключ — по желанию, за отдельную плату</b><p>Пакетами: каждый следующий включает предыдущий.</p>' +
+    '<div class="gd-pk"><i>1</i><div><b>Команда</b><small>сотрудники, ставки и процент, первый график смен</small></div></div>' +
+    '<div class="gd-pk"><i>2</i><div><b>Меню и гости</b><small>+ ТТК с фото и тест по меню, виды абонементов и перенос действующих гостей</small></div></div>' +
+    '<div class="gd-pk"><i>3</i><div><b>Всё под ключ</b><small>+ ХАССП: точки контроля, медкнижки, обучение; себестоимость: закупочные цены, состав напитков, упаковка</small></div></div></div>' +
+    '<a class="btn main wide big mt" data-ln="apply" href="' + GUIDE_URL + '" target="_blank" rel="noopener">' + I('spark') + ' Оставить заявку в Telegram</a>' +
+    '<button class="btn wide mt" data-a="guideCopy">Скопировать текст заявки</button>' +
+    '<div class="gd-req mt" hidden><textarea class="in" rows="6" readonly>' + esc(guideReqText()) + '</textarea></div>' +
+    '<div class="hint mt">По кнопке откроется чат @' + GUIDE_TG + ', а текст заявки скопируется — останется вставить и дописать.</div>';
+}
+function guideReqText() {
+  return 'Здравствуйте! Посмотрел демо «Моей кофейни» и хочу подключить её у себя.\n' +
+    'Кофейня и город: \nТочек и бариста: \nКасса: aQsi / другая / нет\nВажнее всего: зарплата / ХАССП / отчёты';
+}
+// копирование только из нажатия (так требуют Telegram и просмотрщик артефактов); не вышло — показываем текст, чтобы скопировать вручную
+function guideCopyText(silent) {
+  var text = guideReqText(), done = false;
+  function ok() { done = true; if (!silent) toast('Текст заявки скопирован — вставьте его в чат', 'ok'); else setTimeout(function () { toast('Текст заявки скопирован — вставьте его в чат', 'ok'); }, 300); }
+  function fail() {
+    if (done) return;
+    try { var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); var r = document.execCommand('copy'); ta.remove(); if (r) { ok(); return; } } catch (e) {}
+    if (silent) return;
+    var box = document.querySelector('#sheet .gd-req');
+    if (box) { box.hidden = false; var t2 = box.querySelector('textarea'); if (t2) { t2.focus(); t2.select(); } }
+    toast('Не получилось скопировать — выделите текст ниже', 'ok');
+  }
+  try { if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, fail); return; } } catch (e) {}
+  fail();
+}
+SHEETS.guide = function (a) {
+  var n = GUIDE_STEPS.length, i = Math.max(0, Math.min(n - 1, a.i || 0)), st = GUIDE_STEPS[i];
+  var h = shHead(i === 0 ? 'Добро пожаловать' : 'Гайд · ' + i + ' из ' + (n - 1), '«Моя кофейня» — демо');
+  h += '<div class="gd-dots" role="tablist">' + GUIDE_STEPS.map(function (s, k) { return '<button class="' + (k === i ? 'on' : k < i ? 'was' : '') + '" data-a="guideGo" data-v="' + k + '" aria-label="Шаг ' + (k + 1) + '"></button>'; }).join('') + '</div>';
+  h += '<div class="gd-card"><div class="gd-ico">' + I(st.em) + '</div><h2>' + st.t + '</h2>' + (st.apply ? guideApplyHtml() : st.body) + '</div>';
+  if (st.show) h += '<div class="gd-show">' + st.show.map(function (s) { return '<button class="btn wide" data-a="guideShow" data-v="' + s[1] + '">Показать ' + s[0] + '</button>'; }).join('') + '</div>';
+  if (i === 0) h += '<button class="btn main wide big mt" data-a="guideGo" data-v="1">Как пользоваться — 2 минуты</button><div class="row mt" style="gap:8px"><button class="btn grow" data-a="guideLater">Посмотрю сам</button><button class="btn grow" data-a="guideGo" data-v="' + (n - 1) + '">Как подключить</button></div>';
+  else h += '<div class="row mt gd-nav" style="gap:8px"><button class="btn grow" data-a="guideGo" data-v="' + (i - 1) + '">Назад</button>' + (i < n - 1 ? '<button class="btn main grow" data-a="guideGo" data-v="' + (i + 1) + '">Дальше</button>' : '<button class="btn grow" data-a="guideLater">Смотреть демо</button>') + '</div>';
+  return h;
+};
+H.guideOpen = function (d) { guideTipOff(); openSheet('guide', { i: d && d.v != null && d.v !== '' ? +d.v : 0 }); };
+H.guideApplyOpen = function () { H.guideOpen({ v: GUIDE_STEPS.length - 1 }); };
+H.guideGo = function (d) { if (!S.sheet || S.sheet.type !== 'guide') return; S.sheet.args.i = +d.v; GUIDE.last = +d.v; renderSheet(); var sc = document.querySelector('#sheet .pn'); if (sc) sc.scrollTop = 0; };
+H.guideLater = function () { closeSheet(); };
+H.guideCopy = function () { guideCopyText(); };
+// «Показать»: закрыть гайд, открыть нужный экран и подсветить место; внизу — подсказка и возврат в гайд
+H.guideShow = function (d) {
+  var s = GUIDE_SHOW[d.v]; if (!s) return;
+  GUIDE.last = S.sheet && S.sheet.type === 'guide' ? S.sheet.args.i : GUIDE.last;
+  if (S.page) S.page = null;
+  closeSheet();
+  setTimeout(function () {
+    if (s.run) s.run(); else if (S.tab !== s.tab) H.tab({ v: s.tab }); else renderAll();
+    if (s.sel) setTimeout(function () { guideSpot(s.sel); }, 520);
+    guideTip(s.tip);
+  }, 280);
+};
+function guideSpot(sel) {
+  var el = document.querySelector('#main ' + sel.split(', ').join(', #main ')) || document.querySelector(sel); if (!el) return;
+  try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
+  el.classList.remove('gd-spot'); void el.offsetWidth; el.classList.add('gd-spot');
+}
+function guideTip(text) {
+  var el = document.getElementById('gd-tip');
+  if (!el) { el = document.createElement('div'); el.id = 'gd-tip'; document.body.appendChild(el); }
+  el.innerHTML = '<p>' + text + '</p><div class="row" style="gap:8px"><button class="btn sm main grow" data-a="guideBack">Вернуться в гайд</button><button class="btn sm" data-a="guideTipX">Понятно</button></div>';
+  el.className = 'on';
+}
+function guideTipOff() { var el = document.getElementById('gd-tip'); if (el) el.className = ''; }
+H.guideBack = function () { guideTipOff(); H.guideOpen({ v: GUIDE.last }); };
+H.guideTipX = function () { guideTipOff(); };
+H.guideBannerX = function () { try { localStorage.setItem('pich_demo_guide_bn', '0'); } catch (e) {} renderAll(); toast('Гайд всегда под кнопкой «?» вверху', 'ok'); };
+function guideBanner() {
+  var off = false; try { off = localStorage.getItem('pich_demo_guide_bn') === '0'; } catch (e) {}
+  if (off) return '';
+  return '<div class="gd-banner"><button class="x" data-a="guideBannerX" aria-label="Скрыть">✕</button><b>Как пользоваться и зачем это нужно</b><small>Гайд за 2 минуты — с показом прямо в приложении</small><div class="row" style="gap:8px;margin-top:10px"><button class="btn sm main grow" data-a="guideOpen" data-v="1">Открыть гайд</button><button class="btn sm grow" data-a="guideApplyOpen">Как подключить</button></div></div>';
+}
+// Кнопка заявки — обычная ссылка; в Telegram открываем чат штатно. Текст заявки копируется заранее.
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('[data-ln="apply"]'); if (!a) return;
+  guideCopyText(true); try { Stats.hit('guideApply'); } catch (x) {}
+  try { if (PLAT === 'tg' && TGW && TGW.openTelegramLink) { e.preventDefault(); TGW.openTelegramLink(GUIDE_URL); } } catch (x) {}
+}, true);
+// Первый запуск: гайд сам; подсказку о жестах (на телефоне) — когда гайд закрыт
+function guideFirstRun() {
+  try { Object.assign(STAT_LABELS, { guideOpen: 'Гайд: открыть', guideGo: 'Гайд: шаг', guideShow: 'Гайд: показать', guideBack: 'Гайд: вернуться', guideTipX: 'Гайд: понятно', guideLater: 'Гайд: посмотрю сам', guideCopy: 'Гайд: копировать заявку', guideApplyOpen: 'Гайд: как подключить', guideBannerX: 'Гайд: скрыть баннер', guideApply: 'Гайд: заявка в Telegram' }); } catch (e) {}
+  var seen = false; try { seen = !!localStorage.getItem('pich_demo_guide'); localStorage.setItem('pich_demo_guide', '1'); } catch (e) {}
+  if (!seen) setTimeout(function () { if (!S.sheet) H.guideOpen({ v: 0 }); }, 500);
+  var seenG = false; try { seenG = !!localStorage.getItem('pich_demo_hint_g'); } catch (e) {}
+  if (seenG || !('ontouchstart' in window || navigator.maxTouchPoints > 0)) return;
+  // показываем, только когда гайд и окна закрыты уже 2,5 с подряд — не посреди «Показать в приложении»
+  var tries = 0, calm = Date.now(), wait = function () {
+    if (++tries > 1200) return;
+    if (S.sheet || document.querySelector('#gd-tip.on')) calm = Date.now();
+    if (Date.now() - calm < 2500) { setTimeout(wait, 500); return; }
+    try { localStorage.setItem('pich_demo_hint_g', '1'); } catch (e) {}
+    toast('Вкладки листаются свайпом влево-вправо. В графике задержите палец на календаре — и листайте месяцы.', 'ok', 6500);
+  };
+  if (seen) calm = Date.now() - 1600;
+  setTimeout(wait, seen ? 900 : 1500);
+}
+
 function boot() {
   setupTelegram();
   applyTheme(curTheme());
@@ -6794,8 +6990,7 @@ function boot() {
   }
   if (MODE === 'demo') {
     Demo.init(); setData(Demo.view()); document.getElementById('tabs').style.display = ''; renderAll();
-    var seen = false; try { seen = !!localStorage.getItem('pich_demo_hint'); localStorage.setItem('pich_demo_hint', '1'); } catch (e) {}
-    if (!seen) setTimeout(function () { toast('Это демо: данные вымышленные и хранятся только на этом устройстве. Нажми на имя справа вверху, чтобы посмотреть глазами бариста.', 'ok', 7000); }, 600); var seenG = false; try { seenG = !!localStorage.getItem('pich_demo_hint_g'); localStorage.setItem('pich_demo_hint_g', '1'); } catch (e) {} if (!seenG && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) setTimeout(function () { toast('Вкладки листаются свайпом влево-вправо. В графике задержи палец на календаре — и листай месяцы.', 'ok', 6500); }, seen ? 900 : 7900);
+    guideFirstRun();
     return;
   }
   showGate('loading');
